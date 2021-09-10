@@ -1,4 +1,6 @@
-# StocksEra
+# FastStocksEra - FastAPI port of StockEra by spartan737
+
+Currently in processor of migrating from Django to FastAPI in order to better handle asynchronous processing and provide expontentially faster website speeds.
 
 You can view the application in:
 - <a href="https://stocksera.pythonanywhere.com">stocksera.pythonanywhere.com </a>
