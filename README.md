@@ -2,6 +2,11 @@
 
 Currently in processor of migrating from Django to FastAPI in order to better handle asynchronous processing and provide expontentially faster website speeds.
 
+#### Planned additions include:
+- API routes for models
+- SQLAlchemy integration and possible conversion from Sqlite3 to MongoDB for easier asynchronous database access
+- Pydantic Models
+
 You can view the application in:
 - <a href="https://stocksera.pythonanywhere.com">stocksera.pythonanywhere.com </a>
 
