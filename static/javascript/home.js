@@ -40,6 +40,10 @@ function show_reddit(type, elem) {
         text = "Get trending tickers on stocks & crypto-related subreddits based on sentiment, number of posts, comments and upvotes."
         url = "/reddit_analysis/"
     }
+    else if (type == "wsb_live") {
+        text = "Get live sentiment and analysis on most mentioned tickers in WSB discussion thread."
+        url = "/wsb_live/"
+    }
     else if (type == "reddit_etf") {
         text = "WSB ETF contains the top 10 trending tickers on r/wallstreetbets. Past performance included as well."
         url = "/reddit_etf/"
@@ -78,6 +82,10 @@ function show_discover(type, elem) {
     else if (type == "amd_xlnx_ratio") {
         text = "View current AMD-XLNX Share Price Ratio and percentage upside for XLNX when the merger is complete."
         url = "/amd_xlnx_ratio/"
+    }
+    else if (type == "earnings") {
+        text = "View earnings calendar of the week."
+        url = "/earnings_calendar/"
     }
     document.getElementById("discover_description").innerHTML = `
         <div class="section_div_text">${text}</div><div class="href_btn"><a href="${url}">VIEW MORE</a></div>`
@@ -123,7 +131,7 @@ function show_beta(type, elem) {
     }
     else if (type == "covid_beta") {
         text = "With the rise of Covid-19 cases, what are some of the best plays right now?"
-        url = "/beta_covid/"
+        url = "/covid_beta/"
     }
     document.getElementById("beta_description").innerHTML = `
         <div class="section_div_text">${text}</div><div class="href_btn"><a href="${url}">VIEW MORE</a></div>`
@@ -138,7 +146,7 @@ function show_op(type, elem) {
 
     if (type == "video") {
         text = "Watch out for new videos in our YouTube Channel for new updates in the future!"
-        url = "https://www.youtube.com/watch?v=SEYXEcVKt38"
+        url = "https://youtu.be/jkAZu7DvhvY"
     }
     else if (type == "donate") {
         text = `Stocksera is an open-source application.
@@ -152,4 +160,13 @@ function show_op(type, elem) {
     }
     document.getElementById("op_description").innerHTML = `
         <div class="section_div_text">${text}</div><div class="href_btn"><a href="${url}" target="_blank">VIEW MORE</a></div>`
+}
+
+function restore_dark_mode_img() {
+    if (localStorage.getItem("mode") == "dark") {
+        img = document.querySelector("#intro_images").querySelectorAll("img")
+        for (i=0; i<img.length; i++) {
+            img[i].src = img[i].src.replace("light", "dark")
+        }
+    }
 }

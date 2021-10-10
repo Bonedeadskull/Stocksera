@@ -36,11 +36,11 @@
     <div class="instructions">
         <h2>Other Datasets Available</h2>
         <div class="more_info_div_parent">
-            <div class="more_info_div"><a class="more_info_btn" href="{% url 'market_overview' %}" onclick="clickAndDisable(this);">Market Overview</a></div>
-            <div class="more_info_div"><a class="more_info_btn" href="{% url 'short_interest' %}" onclick="clickAndDisable(this);">Short Interest</a></div>
-            <div class="more_info_div"><a class="more_info_btn" href="{% url 'low_float' %}" onclick="clickAndDisable(this);">Low Float</a></div>
-            <div class="more_info_div"><a class="more_info_btn current_link" href="{% url 'ark_trades' %}" onclick="clickAndDisable(this);">ARK Fund</a></div>
-            <div class="more_info_div"><a class="more_info_btn" href="{% url 'amd_xlnx_ratio' %}" onclick="clickAndDisable(this);">AMD-XLNX Ratio</a></div>
+            <div class="more_info_div"><a class="more_info_btn" href="{% url 'market_overview' %}">Market Overview</a></div>
+            <div class="more_info_div"><a class="more_info_btn" href="{% url 'short_interest' %}">Short Interest</a></div>
+            <div class="more_info_div"><a class="more_info_btn" href="{% url 'low_float' %}">Low Float</a></div>
+            <div class="more_info_div"><a class="more_info_btn current_link" href="{% url 'ark_trades' %}">ARK Fund</a></div>
+            <div class="more_info_div"><a class="more_info_btn" href="{% url 'amd_xlnx_ratio' %}">AMD-XLNX Ratio</a></div>
         </div>
     </div>
 
@@ -59,10 +59,12 @@
             <button class="btn_type" onclick="load_trades(1)" type="button">Trades</button>
             <button class="btn_type" onclick="load_news(2)" type="button">News</button>
             <div class="search_bar">
-                <input type="text" class="ticker_input" placeholder="Ticker: " onkeyup="searchFun()" id="ticker_name">
+                <input type="text" class="ticker_input" placeholder="Ticker:" autocomplete="off" onkeyup="searchFun()" id="ticker_name">
                 <button class="submit_btn" type="button"><img src="{% static 'images/search_icon.svg' %}"></button>
             </div>
+            <span style="float: right" class="click_table_info"><b>Click on table row more info.</b></span>
         </div>
+
         <div class="scrollable_div"></div>
 
         <div id="ticker_model" class="modal">

@@ -12,10 +12,9 @@ def database():
                "symbol TEXT, "
                "name TEXT, "
                "count INTEGER, "
-               "next_update TEXT, "
                "UNIQUE('symbol'))")
 
-    subreddits = ["wallstreetbets", "stocks", "stockmarket", "options", "pennystocks", "investing", "shortsqueeze",
+    subreddits = ["wallstreetbets", "stocks", "options", "pennystocks", "investing", "shortsqueeze",
                   "spacs"]
     for subreddit in subreddits:
         db.execute("CREATE table IF NOT EXISTS {} ("
@@ -70,9 +69,39 @@ def database():
                "max_supply VARCHAR (20),"
                "date_updated VARCHAR(20) )")
 
-    db.execute("CREATE table IF NOT EXISTS news_sentiment ("
+    db.execute("CREATE table IF NOT EXISTS wsb_trending_24H ("
                "ticker TEXT, "
+               "mentions INTEGER, "
                "sentiment FLOAT, "
+               "calls TEXT, "
+               "puts TEXT, "
+               "date_updated TEXT )")
+
+    db.execute("CREATE table IF NOT EXISTS wsb_trending_hourly ("
+               "ticker TEXT, "
+               "mentions INTEGER, "
+               "sentiment FLOAT, "
+               "calls TEXT, "
+               "puts TEXT, "
+               "date_updated TEXT )")
+
+    db.execute("CREATE table IF NOT EXISTS wsb_change ("
+               "ticker TEXT, "
+               "mentions INTEGER, "
+               "change FLOAT) ")
+
+    db.execute("CREATE table IF NOT EXISTS wsb_yf ("
+               "ticker TEXT, "
+               "mkt_cap TEXT, "
+               "price_change FLOAT, "
+               "difference_sma FLOAT, "
+               "difference_52w_high FLOAT, "
+               "difference_52w_low FLOAT, "
+               "mentions INTEGER )")
+
+    db.execute("CREATE table IF NOT EXISTS wsb_word_cloud ("
+               "word TEXT, "
+               "mentions INTEGER, "
                "date_updated TEXT )")
 
     db.execute("CREATE table IF NOT EXISTS reddit_etf ("
@@ -104,6 +133,7 @@ def database():
                "updated_date TEXT,"
                "percentage_active FLOAT, "
                "growth FLOAT, "
+               "percentage_price_change FLOAT, "
                "UNIQUE(ticker, subreddit, updated_date) )")
 
     db.execute("CREATE table IF NOT EXISTS twitter_followers ("
@@ -183,6 +213,61 @@ def database():
                "Nov FLOAT, "
                "Dec FLOAT, "
                "Avg FLOAT )")
+
+    db.execute("CREATE table IF NOT EXISTS sec_fillings ("
+               "ticker TEXT, "
+               "filling TEXT, "
+               "description TEXT, "
+               "filling_date TEXT, "
+               "report_url TEXT, "
+               "filing_url) ")
+
+    db.execute("CREATE table IF NOT EXISTS daily_ticker_news ("
+               "Ticker TEXT, "
+               "Date TEXT, "
+               "Title TEXT, "
+               "Link TEXT, "
+               "Sentiment TEXT )")
+
+    db.execute("CREATE table IF NOT EXISTS insider_trading ("
+               "Ticker TEXT, "
+               "Name TEXT, "
+               "Relationship TEXT, "
+               "TransactionDate TEXT, "
+               "TransactionType TEXT, "
+               "Cost FLOAT, "
+               "Shares INTEGER, "
+               "Value INTEGER, "
+               "SharesLeft INTEGER )")
+
+    db.execute("CREATE table IF NOT EXISTS latest_insider_trading ("
+               "Ticker TEXT, "
+               "Name TEXT, "
+               "Relationship TEXT, "
+               "TransactionDate TEXT, "
+               "TransactionType TEXT, "
+               "Cost FLOAT, "
+               "Shares INTEGER, "
+               "Value INTEGER, "
+               "SharesLeft INTEGER,"
+               "DateFilled TEXT, "
+               "UNIQUE ('Ticker', 'Name', 'Relationship', 'TransactionDate', 'TransactionType', 'Cost', 'Shares', "
+               "'Value', 'SharesLeft', 'DateFilled') )")
+
+    db.execute("CREATE table IF NOT EXISTS related_tickers ("
+               "ticker TEXT, "
+               "ticker1 TEXT, "
+               "ticker2 TEXT, "
+               "ticker3 TEXT, "
+               "ticker4 TEXT, "
+               "ticker5 TEXT, "
+               "ticker6 TEXT )")
+
+    db.execute("CREATE table IF NOT EXISTS max_pain ("
+               "symbol TEXT, "
+               "date_updated TEXT, "
+               "max_pain FLOAT ,"
+               "UNIQUE ('symbol', 'date_updated', 'max_pain') )")
 
     print("Successfully created/updated database")
 

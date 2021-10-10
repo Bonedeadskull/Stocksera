@@ -89,7 +89,8 @@ function load_graph() {
             scales: {
                 yAxes: [{
                         gridLines: {
-                            display: false
+                            drawOnChartArea: false,
+                            color: "grey",
                         },
                         type: "linear",
                         stacked: true,
@@ -103,7 +104,8 @@ function load_graph() {
                 xAxes: [{
                     offset: true,
                     gridLines: {
-                        drawOnChartArea: false
+                        drawOnChartArea: false,
+                        color: "grey",
                     },
                     stacked: true
                 }],
@@ -174,14 +176,7 @@ function check_table() {
         }
 
         var fifty_day_price = row.cells[14];
-        if (fifty_day_price.innerText.includes("-")) {
-            fifty_day_price.innerText = fifty_day_price.innerText + "%";
-            fifty_day_price.style.color = "red";
-        }
-        else {
-            fifty_day_price.innerText = fifty_day_price.innerText + "%";
-            fifty_day_price.style.color = "green";
-        }
+        fifty_day_price.innerHTML = "$" + fifty_day_price.innerHTML
 
         var price_target = row.cells[18];
         if (price_target.innerText != "N/A") {

@@ -1,3 +1,5 @@
+import os
+import sys
 import math
 from collections import Counter
 
@@ -5,6 +7,7 @@ import praw
 from pycoingecko import CoinGeckoAPI
 import matplotlib.pyplot as plt
 
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 from helpers import *
 import scheduled_tasks.reddit.config as cfg
 
@@ -64,7 +67,6 @@ def get_topics():
         'SHIB': {'SHIBA', 'SHIB', 'SHIBA INU'},
         'IOTA': {'IOTA', 'MIOTA'},
         'LTO': {'LTO NETWORK', 'LTO'},
-        'MOON': {'MOONS', 'MOON'},
         'THETA': {'THETA'},
         'KSM': {'KUSAMA', 'KSM'},
         'CAKE': {'PANCAKESWAP', 'PANCAKE', 'CAKE'},
@@ -91,10 +93,8 @@ def get_submission_praw(n, sub):
     recent = {}
     subreddit = reddit.subreddit(sub)
     all_results = []
-    count = 0
     for post in subreddit.new(limit=1000):
-        print(count, ": ", datetime.fromtimestamp(post.created_utc), post.title)
-        count += 1
+        # print(count, ": ", datetime.fromtimestamp(post.created_utc), post.title)
         all_results.append([post.title, post.link_flair_text, post.selftext, post.score, post.num_comments,
                             post.created_utc])
 
@@ -202,12 +202,14 @@ def populate_df(current_scores_dict):
 
 
 def get_financial_data(stats_table, crypto_id, symbol):
-    try:
-        market_data = client.get_coin_by_id(crypto_id)['market_data']
-    except requests.exceptions.RequestException as e:
-        print(e, "errors")
-        time.sleep(30)
-        market_data = client.get_coin_by_id(crypto_id)['market_data']
+    while True:
+        try:
+            market_data = client.get_coin_by_id(crypto_id)['market_data']
+        except:
+            print("errors")
+            time.sleep(15)
+        else:
+            break
 
     current_price = market_data["current_price"]["usd"]
     total_volume = long_number_format(market_data["total_volume"]["usd"])
@@ -236,12 +238,13 @@ def get_financial_data(stats_table, crypto_id, symbol):
 
 
 def get_graph_chart(crypto_id, symbol):
-    try:
-        prices = client.get_coin_market_chart_by_id(crypto_id, vs_currency="USD", days=30)
-    except requests.exceptions.RequestException as e:
-        print(e, "errors")
-        time.sleep(30)
-        prices = client.get_coin_market_chart_by_id(crypto_id, vs_currency="USD", days=30)
+    while True:
+        try:
+            prices = client.get_coin_market_chart_by_id(crypto_id, vs_currency="USD", days=30)
+        except:
+            time.sleep(15)
+        else:
+            break
     prices = prices["prices"]
     df = pd.DataFrame(data=prices, columns=["time", "price"]).iloc[::12, :]
     price_list = df["price"].to_list()
@@ -278,13 +281,13 @@ def main():
     ticker_list = list(results_df.index.values)
     stats_table = []
 
-    try:
-        coingecko_coin_list = client.get_coins_list()
-    except requests.exceptions.RequestException as e:
-        print("errors", e)
-        print("20 ")
-        time.sleep(30)
-        coingecko_coin_list = client.get_coins_list()
+    while True:
+        try:
+            coingecko_coin_list = client.get_coins_list()
+        except:
+            time.sleep(15)
+        else:
+            break
 
     print(len(ticker_list), "number of tickers")
     for index, symbol in enumerate(ticker_list):
@@ -307,7 +310,11 @@ def main():
     db.execute("SELECT DISTINCT (date_updated) FROM cryptocurrency")
     dates = db.fetchall()
 
-    db.execute("SELECT * FROM cryptocurrency WHERE date_updated LIKE '%{}%'".format(dates[-1][0].split()[0], ))
+    if dates:
+        last_date = dates[-1][0].split()[0]
+    else:
+        last_date = ""
+    db.execute("SELECT * FROM cryptocurrency WHERE date_updated LIKE '%{}%'".format(last_date, ))
     prev = db.fetchall()
 
     for index, row in results_df.iterrows():
@@ -348,3 +355,7 @@ def main():
             "(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             tuple(results_df.loc[row_num].tolist()))
         conn.commit()
+
+
+if __name__ == '__main__':
+    main()

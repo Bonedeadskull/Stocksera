@@ -93,3 +93,81 @@ function stats() {
     var percent_green = Math.round(10000 * green_days / total_count) / 100
     document.getElementById("general_stats").innerHTML = `Green Days: ${green_days}/${total_count} (${percent_green}%)`
 }
+
+
+function draw_graph() {
+    day_mapping = {"Monday": "Mon", "Tuesday": "Tue", "Wednesday": "Wed", "Thursday": "Thur", "Friday": "Fri"}
+    tr = document.querySelectorAll("table")[1].querySelectorAll("tr")
+    day_list = [], percent_change_list = []
+    for (i=1; i<tr.length; i++) {
+        td = tr[i].querySelectorAll("td")
+        day_list.push(day_mapping[td[0].innerHTML])
+        percent_change_list.push(td[1].innerHTML)
+    }
+
+    var historical_chart = document.getElementById('historical_chart');
+    var historical_chart = new Chart(historical_chart, {
+        type: 'horizontalBar',
+        data: {
+            labels: day_list,
+            datasets: [{
+                label: '% Price Change',
+                data: percent_change_list,
+                borderColor: "orange",
+                backgroundColor: 'orange',
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            elements: {
+                bar: {
+                  borderWidth: 1,
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+            },
+            scales: {
+                 xAxes: [{
+                    offset: true,
+                    gridLines: {
+                        drawOnChartArea: false,
+                        color: "grey",
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Price Change [%]',
+                    },
+                }],
+                yAxes: [{
+                    offset: true,
+                    gridLines: {
+                        drawOnChartArea: false,
+                        color: "grey",
+                    },
+                }],
+            },
+
+            // To show value when hover on any part of the graph
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        var label = data.datasets[tooltipItem.datasetIndex].label;
+                        return label + ': ' + value + '%';
+                    }
+                }
+            },
+            hover: {
+                mode: 'index',
+                intersect: false
+            },
+        }
+    });
+}

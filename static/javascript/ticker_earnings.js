@@ -34,7 +34,7 @@ function load_graph() {
                     label: 'Revenue',
                     type: 'bar',
                     data: revenue_list,
-                    backgroundColor: 'wheat',
+                    backgroundColor: 'orange',
                 },
                 {
                     label: 'Earnings',
@@ -53,18 +53,14 @@ function load_graph() {
             scales: {
                 yAxes: [{
                         gridLines: {
-                            display: false
+                            drawOnChartArea: false,
+                            color: "grey",
                         },
                         type: "linear",
                         scaleLabel: {
                             display: true,
-                            labelString: 'Amount [$M]',
+                            labelString: 'Amount [M]',
                             beginAtZero: true,
-                        },
-                        ticks: {
-                            callback: function(value, index, values) {
-                                return value + "M";
-                            }
                         },
                     }],
 
@@ -76,7 +72,8 @@ function load_graph() {
                       minRotation: 0,
                     },
                     gridLines: {
-                        drawOnChartArea: false
+                        drawOnChartArea: false,
+                        color: "grey"
                     },
                     stacked: false
                 }],

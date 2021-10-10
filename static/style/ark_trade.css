@@ -205,3 +205,8 @@ td div:hover {
 .read_more:hover {
     color: #26a69a;
 }
+
+.click_table_info {
+    text-align: right;
+    margin: 10px 0 0 0;
+}

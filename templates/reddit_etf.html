@@ -28,16 +28,18 @@
             Starting from 2021-09-01, the ETFs listed: SPY, QQQ, TQQQ, DIA <b>will no longer be purchased by Reddit ETF</b>.
             <br><br>
             <b>Do note that this is not financial advice.</b> All "trades" are conducted solely based on tickers' popularity in r/wallstreetbets.
+            <div class="subscribe_email_div"><a class="subscribe_email" href="/subscribe" target="_blank">Subscribe to Free WSB Notifications</a></div>
         </p>
     </div>
 
     <div class="instructions">
         <h2>Other Datasets Available</h2>
         <div class="more_info_div_parent">
-            <div class="more_info_div"><a class="more_info_btn" href="/reddit_analysis" onclick="clickAndDisable(this);">Trending Stocks</a></div>
-            <div class="more_info_div"><a class="more_info_btn" href="/reddit_analysis/?subreddit=cryptocurrency" onclick="clickAndDisable(this);">Trending Crypto</a></div>
-            <div class="more_info_div"><a class="more_info_btn current_link" href="{% url 'reddit_etf' %}" onclick="clickAndDisable(this);">WSB ETF</a></div>
-            <div class="more_info_div"><a class="more_info_btn" href="{% url 'subreddit_count' %}" onclick="clickAndDisable(this);">Subreddit Stats</a></div>
+            <div class="more_info_div"><a class="more_info_btn" href="/wsb_live">WSB Live</a></div>
+            <div class="more_info_div"><a class="more_info_btn" href="/reddit_analysis">Trending Stocks</a></div>
+            <div class="more_info_div"><a class="more_info_btn" href="/reddit_analysis/?subreddit=cryptocurrency">Trending Crypto</a></div>
+            <div class="more_info_div"><a class="more_info_btn current_link" href="{% url 'reddit_etf' %}">WSB ETF</a></div>
+            <div class="more_info_div"><a class="more_info_btn" href="{% url 'subreddit_count' %}">Subreddit Stats</a></div>
         </div>
     </div>
 
@@ -61,7 +63,7 @@
                         <tbody>
                             {% for ticker in open_trade %}
                                 <tr>
-                                    <td><a href="{% url 'ticker' %}?quote={{ticker.0}}" target="_blank"><img src="https://g.foolcdn.com/art/companylogos/mark/{{ticker.0}}.png" class="table_ticker_logo" onerror="this.error=null;load_table_error_img(this, '{{ticker.0}}')">{{ticker.0}}</a></td>
+                                    <td><a href="{% url 'ticker' %}?quote={{ticker.0}}" target="_blank"><img src="https://g.foolcdn.com/art/companylogos/mark/{{ticker.0}}.png" class="table_ticker_logo" onerror="this.error=null;load_table_error_img(this, '{{ticker.0}}')"><b>{{ticker.0}}</b></a></td>
                                     <td>{{ticker.1}}</td>
                                     <td>${{ticker.2}}</td>
                                     <td>{{ticker.3}}</td>
@@ -79,7 +81,7 @@
             <p class="table_title">Previous Trades (Realized PnL: <span>{{realized_PnL}}</span>)</p>
             <div class="previous_trades_stats"></div>
             <div class="search_bar">
-                <input type="text" class="ticker_input" placeholder="Ticker: " onkeyup="searchTicker(this)">
+                <input type="text" class="ticker_input" placeholder="Ticker:" onkeyup="searchTicker(this)" autocomplete="off">
                 <button class="submit_btn" type="button"><img src="{% static 'images/search_icon.svg' %}"></button>
             </div>
             <div class="scrollable_div">
@@ -99,7 +101,7 @@
                     <tbody>
                         {% for ticker in close_trade %}
                             <tr>
-                                <td><a href="{% url 'ticker' %}?quote={{ticker.0}}" target="_blank"><img src="https://g.foolcdn.com/art/companylogos/mark/{{ticker.0}}.png" class="table_ticker_logo" onerror="this.error=null;load_table_error_img(this, '{{ticker.0}}')">{{ticker.0}}</a></td>
+                                <td><a href="{% url 'ticker' %}?quote={{ticker.0}}" target="_blank"><img src="https://g.foolcdn.com/art/companylogos/mark/{{ticker.0}}.png" class="table_ticker_logo" onerror="this.error=null;load_table_error_img(this, '{{ticker.0}}')"><b>{{ticker.0}}</b></a></td>
                                 <td>{{ticker.1}}</td>
                                 <td>${{ticker.2}}</td>
                                 <td>{{ticker.3}}</td>

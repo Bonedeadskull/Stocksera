@@ -75,10 +75,18 @@ function subreddit_count(duration) {
                 ticks: {
                     beginAtZero: false,
                     maxTicksLimit: 6,
+                    callback: function(value, index, values) {
+                        return value / 1000;
+                    }
                 },
                 gridLines: {
-                    drawOnChartArea: false
-                }
+                    drawOnChartArea: false,
+                    color: "grey",
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Number Redditors [K]',
+                },
             }],
             xAxes: [{
                 ticks: {
@@ -87,7 +95,8 @@ function subreddit_count(duration) {
                   minRotation: 0,
                 },
                 gridLines: {
-                    drawOnChartArea: false
+                    drawOnChartArea: false,
+                    color: "grey",
                 }
             }]
         },
@@ -102,7 +111,7 @@ function subreddit_count(duration) {
             mode: 'index',
             intersect: false,
             callbacks: {
-                label: (item) => `${item.yLabel} subscribers`,
+                label: (item) => `${Number(item.yLabel).toLocaleString()} subscribers`,
             },
         },
         hover: {
@@ -283,8 +292,14 @@ function subreddit_count(duration) {
                     maxTicksLimit: 6,
                 },
                 gridLines: {
-                    drawOnChartArea: false
-                }
+                    drawOnChartArea: false,
+                    color: "grey",
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Daily Growth [%]',
+                    beginAtZero: true,
+                },
             }],
             xAxes: [{
                 ticks: {
@@ -293,7 +308,8 @@ function subreddit_count(duration) {
                   minRotation: 0,
                 },
                 gridLines: {
-                    drawOnChartArea: false
+                    drawOnChartArea: false,
+                    color: "grey",
                 }
             }]
         },
@@ -377,8 +393,14 @@ function subreddit_count(duration) {
                     maxTicksLimit: 6,
                 },
                 gridLines: {
-                    drawOnChartArea: false
-                }
+                    drawOnChartArea: false,
+                    color: "grey",
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Active Users [%]',
+                    beginAtZero: true,
+                },
             }],
             xAxes: [{
                 ticks: {
@@ -387,7 +409,8 @@ function subreddit_count(duration) {
                   minRotation: 0,
                 },
                 gridLines: {
-                    drawOnChartArea: false
+                    drawOnChartArea: false,
+                    color: "grey",
                 }
             }]
         },
@@ -425,134 +448,58 @@ function subreddit_count(duration) {
     find_day_gain(crypto_count, "crypto_diff")
 }
 
-function subreddit_individual(duration) {
-    var date_threshold = get_date_difference(duration, "-")
-    var subreddit_date = [], subreddit_count = [], subreddit_active = [] , subreddit_growth = []
+function subreddit_individual_table() {
+    var subreddit_count = [], subreddit_active = [] , subreddit_growth = []
     var tr = document.getElementsByTagName("table")[0].querySelectorAll("tr")
     for (i=tr.length-1; i>0; i--) {
         var td = tr[i].querySelectorAll("td")
-        subreddit_date.push(td[0].innerHTML)
         subreddit_count.push(td[1].innerHTML)
-        subreddit_active.push(td[3].innerHTML)
-        subreddit_growth.push(td[4].innerHTML)
+
+        td[1].innerHTML = Number(td[1].innerHTML).toLocaleString()
+        td[2].innerHTML = Number(td[2].innerHTML).toLocaleString()
+        td[3].innerHTML += "%"
+        td[4].innerHTML += "%"
+        td[5].innerHTML += "%"
     }
 
-//    subreddit_chart = document.getElementById('subreddit_chart');
-//    subreddit_chart = new Chart(subreddit_chart, {
-//        data: {
-//            labels: subreddit_date,
-//            datasets: [
-//                {
-//                    label: 'Num Redditors',
-//                    type: 'line',
-//                    data: subreddit_count,
-//                    borderColor: 'rgb(38, 166, 154)',
-//                    backgroundColor: 'transparent',
-//                    yAxisID: 'A',
-//                },
-//                {
-//                    label: '% Active',
-//                    type: 'bar',
-//                    data: subreddit_active,
-//                    borderColor: 'wheat',
-//                    backgroundColor: 'wheat',
-//                    yAxisID: 'B',
-//                },
-//                {
-//                    label: '% Growth',
-//                    type: 'bar',
-//                    data: subreddit_growth,
-//                    borderColor: 'blue',
-//                    backgroundColor: 'blue',
-//                    yAxisID: 'B',
-//                }]
-//        },
-//
-//        options: {
-//            responsive: true,
-//            maintainAspectRatio: false,
-//            legend: {
-//                display: true
-//            },
-//            scales: {
-//                yAxes: [
-//                    {
-//                        position: 'left',
-//                        gridLines: {
-//                            display: false
-//                        },
-//                        type: "linear",
-//                        id: "A",
-//                        scaleLabel: {
-//                            display: true,
-//                            labelString: 'Num Redditors',
-//                            beginAtZero: false,
-//                        }
-//                    },
-//                    {
-//                        scaleLabel: {
-//                            display: true,
-//                            labelString: 'Percentage',
-//                            beginAtZero: true,
-//                        },
-//                        type: "linear",
-//                        id: "B",
-//                        position:"right",
-//                        gridLines: {
-//                            display: false
-//                        },
-//                        ticks: {
-//                            callback: function(value, index, values) {
-//                                return value + "%";
-//                            }
-//                        },
-//                    }],
-//
-//                xAxes: [{
-//                    offset: true,
-//                    ticks: {
-//                      maxTicksLimit: 10,
-//                      maxRotation: 45,
-//                      minRotation: 0,
-//                    },
-//                    gridLines: {
-//                        drawOnChartArea: false
-//                    },
-//                    stacked: false
-//                }],
-//            },
-//            pan: {
-//                enabled: true,
-//                mode: "x",
-//                speed: 10,
-//                threshold: 10
-//            },
-//            zoom: {
-//                enabled: true,
-//                drag: false,
-//                mode: "xy",
-//                speed: 1
-//            },
-//
-//            // To show value when hover on any part of the graph
-//            tooltips: {
-//                mode: 'index',
-//                intersect: false,
-//            },
-//            hover: {
-//                mode: 'index',
-//                intersect: false
-//            },
-//            elements: {
-//                line: {
-//                    tension: 0
-//                },
-//                point:{
-//                    radius: 0
-//                }
-//            },
-//        },
-//    });
+    last_index = subreddit_count.length-1
+    first_row = tr[1].querySelectorAll("td")
+    last_active = first_row[3].innerHTML.replace("%", "")
+    last_growth = first_row[4].innerHTML.replace("%", "")
+    last_price_change = first_row[5].innerHTML.replace("%", "")
+
+    last_subreddit = Number(subreddit_count[last_index])
+    last_7d_redditors = Number(subreddit_count[last_index-7])
+    last_7d_change = Math.round(10000 * (last_subreddit - last_7d_redditors) / last_7d_redditors) / 100
+    document.getElementsByClassName("individual_subreddit_description")[0].innerHTML += `
+        <div style="display:flex;justify-content:space-around;margin-top:10px">
+            <div><b>7 Days Growth:</b> ${last_7d_change}%</div>
+            <div><b>% Growth:</b> ${last_growth}%</div>
+            <div><b>% Active:</b> ${last_active}%</div>
+            <div><b>% Price Change:</b> ${last_price_change}%</div>
+        </div>
+    `
+}
+
+function subreddit_individual(duration) {
+    var date_threshold = get_date_difference(duration, "-")
+    var subreddit_date = [], subreddit_count = [], subreddit_active = [] , subreddit_growth = [], price_change = []
+    var tr = document.getElementsByTagName("table")[0].querySelectorAll("tr")
+    for (i=tr.length-1; i>0; i--) {
+        var td = tr[i].querySelectorAll("td")
+        date_string = td[0].innerHTML;
+        if (date_string >= date_threshold) {
+            subreddit_date.push(date_string)
+            subreddit_count.push(td[1].innerHTML)
+            subreddit_active.push(td[3].innerHTML)
+            subreddit_growth.push(td[4].innerHTML)
+            price_change.push(td[5].innerHTML)
+            tr[i].style.removeProperty("display");
+        }
+        else {
+            tr[i].style.display = "none"
+        }
+    }
 
     var trace1 = {
         x: subreddit_date,
@@ -575,16 +522,25 @@ function subreddit_individual(duration) {
                 "<extra></extra>",
         type: 'bar',
         marker: {
-            color: 'orange',
-            opacity: 0.6,
-            line: {
-                color: 'wheat',
-                width: 1.5
-            }
+            color: 'orange'
         }
     };
 
     var trace3 = {
+        x: subreddit_date,
+        y: price_change,
+        yaxis: 'y2',
+        name: "% Price Change",
+        hovertemplate:
+                "% Price Change: %{y}%<br>" +
+                "<extra></extra>",
+        type: 'bar',
+        marker: {
+            color: 'darkblue',
+        }
+    };
+
+    var trace4 = {
         x: subreddit_date,
         y: subreddit_active,
         yaxis: 'y2',
@@ -594,10 +550,10 @@ function subreddit_individual(duration) {
                 "<extra></extra>",
         type: 'bar',
         marker: {
-            color: 'rgb(158,202,225)',
+            color: 'red',
             opacity: 0.6,
             line: {
-                color: 'rgb(8,48,107)',
+                color: 'red',
                 width: 1.5
             }
         }
@@ -655,11 +611,21 @@ function subreddit_individual(duration) {
             x: 0.5,
             xanchor: 'center',
             y: 1.1,
-            orientation: 'h'
-        }
+            orientation: 'h',
+            font: {
+                size: 10,
+            }
+        },
     };
 
-    var data = [trace1, trace2, trace3];
-    Plotly.newPlot('chart', data, layout, {displayModeBar: false, showTips: true, responsive: true});
+    var data = [trace1, trace2, trace3, trace4];
+    Plotly.newPlot('chart', data, layout, {displayModeBar: false, showTips: false, responsive: true, });
 
+}
+
+function check_subreddit(ticker, subreddit) {
+    if (subreddit == "N/A") {
+        document.querySelector(".contents_div").style.display = "none"
+        document.querySelector("#submit_subreddit").style.removeProperty("display")
+    }
 }
